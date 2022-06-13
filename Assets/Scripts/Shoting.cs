@@ -32,7 +32,7 @@ public class Shoting : MonoBehaviour
         {
             var spawned = Instantiate(ball, transform.position, transform.rotation);
 
-            spawned.Init(ball.transform.forward * force);
+            spawned.Init(transform.forward * force);
         }
     }
 }
