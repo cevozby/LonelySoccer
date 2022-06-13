@@ -11,11 +11,14 @@ public class Shoting : MonoBehaviour
 
     public Vector3 lookForce;
 
+    //[SerializeField] GameObject realBall;
+    Rigidbody ballRB;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        ballRB = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -30,9 +33,10 @@ public class Shoting : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            var spawned = Instantiate(ball, transform.position, transform.rotation);
+            //var spawned = Instantiate(ball, transform.position, transform.rotation);
 
-            spawned.Init(transform.forward * force);
+            //spawned.Init(transform.forward * force);
+            ballRB.velocity = transform.forward * force;
         }
     }
 }
