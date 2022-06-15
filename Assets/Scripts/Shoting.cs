@@ -43,7 +43,6 @@ public class Shoting : MonoBehaviour
 
         if (GoalManager.goalCheck)
         {
-            Debug.Log("Gol oldu");
             ballRB.velocity = Vector3.zero;
         }
         
@@ -68,6 +67,7 @@ public class Shoting : MonoBehaviour
             //var spawned = Instantiate(ball, transform.position, transform.rotation);
 
             //spawned.Init(transform.forward * force);
+            drawLine.SimulateDottedLine(ball, transform.position, Vector3.zero);
             ballRB.velocity = transform.forward * force;
             shotCheck = true;
         }

@@ -7,34 +7,43 @@ public class DrawLine : MonoBehaviour
 {
     Scene simulationScene;
     PhysicsScene physicsScene;
-    [SerializeField] Transform obstaclesParent;
+    [SerializeField] public Transform[] obstaclesParents;
+    [SerializeField] public GameObject[] dummiesParents;
 
     LineRenderer line;
     [SerializeField] int maxPhysicsFrameIterations = 100;
 
-    Dictionary<Transform, Transform> dummyObjects = new Dictionary<Transform, Transform>();
+    [HideInInspector] public Dictionary<Transform, Transform> dummyObjects = new Dictionary<Transform, Transform>();
+
+    [HideInInspector] public int levelControl = 1;
+
+    Vector3 startPos;
 
     private void Start()
     {
+        //Debug.Log("level control: " + levelControl + " level: " + LevelManager.level);
+        startPos = transform.position;
         CreatePhysicsScene();
         line = GetComponent<LineRenderer>();
     }
 
     private void Update()
     {
-        foreach(var item in dummyObjects)
+        ChangeScene();
+        foreach (var item in dummyObjects)
         {
             item.Value.position = item.Key.position;
             item.Value.rotation = item.Key.rotation;
         }
     }
 
-    void CreatePhysicsScene()
+    public void CreatePhysicsScene()
     {
-        simulationScene = SceneManager.CreateScene("SimulationScene", new CreateSceneParameters(LocalPhysicsMode.Physics3D));
+        
+        simulationScene = SceneManager.CreateScene("SimulationScene" + levelControl, new CreateSceneParameters(LocalPhysicsMode.Physics3D));
         physicsScene = simulationScene.GetPhysicsScene();
 
-        foreach(Transform obj in obstaclesParent)
+        foreach(Transform obj in obstaclesParents[levelControl - 1])
         {
             var ghostObj = Instantiate(obj.gameObject, obj.position, obj.rotation);
             ghostObj.GetComponent<MeshRenderer>().enabled = false;
@@ -63,6 +72,30 @@ public class DrawLine : MonoBehaviour
         }
 
         Destroy(ghostBall.gameObject);
+    }
+
+    void ChangeScene()
+    {
+        if (levelControl != LevelManager.level)
+        {
+            dummyObjects.Clear();
+            dummiesParents[levelControl - 1].SetActive(false);
+            SceneManager.UnloadSceneAsync("SimulationScene" + levelControl);
+            levelControl++;
+            dummiesParents[levelControl - 1].SetActive(true);
+            CreatePhysicsScene();
+            StartCoroutine(ResetBallTimer());
+
+        }
+    }
+
+    IEnumerator ResetBallTimer()
+    {
+
+        yield return new WaitForSeconds(1.5f);
+        transform.position = startPos;
+        Shoting.shotCheck = false;
+        GoalManager.goalCheck = false;
     }
 
 }

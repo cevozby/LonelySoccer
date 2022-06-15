@@ -31,8 +31,8 @@ public class GoalManager : MonoBehaviour
     {
         if (other.gameObject.CompareTag("SoccerGoal"))
         {
-            Debug.Log("Goal");
             goalCheck = true;
+            LevelManager.level++;
             StartCoroutine(ConfettiTimer(time));
         }
     }
