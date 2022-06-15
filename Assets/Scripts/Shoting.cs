@@ -34,7 +34,7 @@ public class Shoting : MonoBehaviour
         
         if (Input.GetMouseButton(0))
         {
-            if (!shotCheck)
+            if (!shotCheck && !IgnoreMouse())
             {
                 drawLine.SimulateDottedLine(ball, transform.position, transform.forward * force);
             }
@@ -62,7 +62,7 @@ public class Shoting : MonoBehaviour
 
     void ShotControl()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && !IgnoreMouse())
         {
             //var spawned = Instantiate(ball, transform.position, transform.rotation);
 
@@ -72,4 +72,27 @@ public class Shoting : MonoBehaviour
             shotCheck = true;
         }
     }
+
+    public static bool IgnoreMouse()
+    {
+        
+        bool redDummy = false;
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
+        {
+            Ray mouse = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            bool isHit = Physics.Raycast(mouse,out hit, 500f);
+            
+            if (isHit && hit.collider.CompareTag("RedDummy"))
+            {
+                redDummy = true;
+            }
+            else
+            {
+                redDummy = false;
+            }
+        }
+        return redDummy;
+    }
+
 }

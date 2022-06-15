@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using System;
 
 public class NextLevel : MonoBehaviour
 {
-    DrawLine level;
+    /*DrawLine level;
 
     //[SerializeField] Transform ball;
     Vector3 startPos;
@@ -49,6 +49,5 @@ public class NextLevel : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         transform.position = startPos;
 
-    }
-
+    }*/
 }
