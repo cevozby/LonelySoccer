@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - SoccerGoal
+  - RedDummy
   layers:
   - Default
   - TransparentFX
