@@ -268,7 +268,6 @@ MonoBehaviour:
   obstaclesParents: []
   dummiesParents: []
   maxPhysicsFrameIterations: 100
-  levelControl: 1
 --- !u!1 &15383147
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,7 +619,7 @@ GameObject:
   - component: {fileID: 195223960}
   m_Layer: 0
   m_Name: YellowDummy
-  m_TagString: Untagged
+  m_TagString: Dummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -874,7 +873,7 @@ GameObject:
   - component: {fileID: 369431436}
   m_Layer: 0
   m_Name: YellowDummy
-  m_TagString: Untagged
+  m_TagString: Dummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1257,7 +1256,7 @@ GameObject:
   - component: {fileID: 530007997}
   m_Layer: 0
   m_Name: YellowDummy
-  m_TagString: Untagged
+  m_TagString: Dummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1793,7 +1792,7 @@ GameObject:
   - component: {fileID: 795143920}
   m_Layer: 0
   m_Name: YellowDummy
-  m_TagString: Untagged
+  m_TagString: Dummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1996,7 +1995,7 @@ GameObject:
   - component: {fileID: 986277034}
   m_Layer: 0
   m_Name: YellowDummy
-  m_TagString: Untagged
+  m_TagString: Dummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2388,7 +2387,7 @@ GameObject:
   - component: {fileID: 1211017749}
   m_Layer: 0
   m_Name: YellowDummy
-  m_TagString: Untagged
+  m_TagString: Dummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7427,7 +7426,7 @@ GameObject:
   - component: {fileID: 1612338321}
   m_Layer: 0
   m_Name: YellowDummy
-  m_TagString: Untagged
+  m_TagString: Dummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7525,7 +7524,7 @@ GameObject:
   - component: {fileID: 1704284962}
   m_Layer: 0
   m_Name: YellowDummy
-  m_TagString: Untagged
+  m_TagString: Dummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7624,7 +7623,7 @@ GameObject:
   - component: {fileID: 1800119607}
   m_Layer: 0
   m_Name: PurpleDummy
-  m_TagString: RedDummy
+  m_TagString: Dummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17650,7 +17649,7 @@ GameObject:
   - component: {fileID: 2104952671}
   m_Layer: 0
   m_Name: YellowDummy
-  m_TagString: Untagged
+  m_TagString: Dummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18138,7 +18137,6 @@ MonoBehaviour:
   - {fileID: 133251227}
   - {fileID: 152671109}
   maxPhysicsFrameIterations: 100
-  levelControl: 1
 --- !u!114 &3890820681446171309
 MonoBehaviour:
   m_ObjectHideFlags: 0

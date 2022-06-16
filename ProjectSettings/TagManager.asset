@@ -6,6 +6,7 @@ TagManager:
   tags:
   - SoccerGoal
   - RedDummy
+  - Dummy
   layers:
   - Default
   - TransparentFX

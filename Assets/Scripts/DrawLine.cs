@@ -7,43 +7,59 @@ public class DrawLine : MonoBehaviour
 {
     Scene simulationScene;
     PhysicsScene physicsScene;
-    [SerializeField] public Transform[] obstaclesParents;
-    [SerializeField] public GameObject[] dummiesParents;
+    [SerializeField] Transform[] obstaclesParents;
+    [SerializeField] GameObject[] dummiesParents;
 
     LineRenderer line;
-    [SerializeField] int maxPhysicsFrameIterations = 100;
+    [SerializeField] public static int maxPhysicsFrameIterations = 15;
+    public int index;
+    public int deneme;
 
-    [HideInInspector] public Dictionary<Transform, Transform> dummyObjects = new Dictionary<Transform, Transform>();
+    Dictionary<Transform, Transform> dummyObjects = new Dictionary<Transform, Transform>();
 
-    [HideInInspector] public int levelControl = 1;
+    int levelControl = 1;
 
     Vector3 startPos;
 
+    public bool canShot;
+
+
+    public int reflection;
+    public float maxLength;
+
+    Vector3 direction;
+
     private void Start()
     {
-        //Debug.Log("level control: " + levelControl + " level: " + LevelManager.level);
+        index = 0;
+        canShot = false;
         startPos = transform.position;
-        CreatePhysicsScene();
+        //CreatePhysicsScene();
         line = GetComponent<LineRenderer>();
     }
 
     private void Update()
     {
         ChangeScene();
-        foreach (var item in dummyObjects)
+        //SimulateChangesControl();
+        deneme = maxPhysicsFrameIterations;
+        //DrawingLine();
+
+        if (Input.GetMouseButtonUp(0))
         {
-            item.Value.position = item.Key.position;
-            item.Value.rotation = item.Key.rotation;
+            line.enabled = false;
         }
+
     }
 
-    public void CreatePhysicsScene()
+    #region SceneManagement
+    /*public void CreatePhysicsScene()
     {
-        
+
         simulationScene = SceneManager.CreateScene("SimulationScene" + levelControl, new CreateSceneParameters(LocalPhysicsMode.Physics3D));
         physicsScene = simulationScene.GetPhysicsScene();
 
-        foreach(Transform obj in obstaclesParents[levelControl - 1])
+        foreach (Transform obj in obstaclesParents[levelControl - 1])
         {
             var ghostObj = Instantiate(obj.gameObject, obj.position, obj.rotation);
             ghostObj.GetComponent<MeshRenderer>().enabled = false;
@@ -53,12 +69,31 @@ public class DrawLine : MonoBehaviour
                 dummyObjects.Add(obj, ghostObj.transform);
             }
         }
+    }*/
+
+    void ChangeScene()
+    {
+        if (levelControl != LevelManager.level)
+        {
+            dummyObjects.Clear();
+            dummiesParents[levelControl - 1].SetActive(false);
+            //SceneManager.UnloadSceneAsync("SimulationScene" + levelControl);
+            levelControl++;
+            dummiesParents[levelControl - 1].SetActive(true);
+            //CreatePhysicsScene();
+            StartCoroutine(ResetBallTimer());
+
+        }
     }
 
-    public void SimulateDottedLine(Ball ballPrefab, Vector3 pos, Vector3 velocity)
+    #endregion
+
+    #region SimulateManagement
+
+    /*public void SimulateDottedLine(Ball ballPrefab, Vector3 pos, Vector3 velocity)
     {
         var ghostBall = Instantiate(ballPrefab, pos, Quaternion.identity);
-        ghostBall.GetComponent<MeshRenderer>().enabled = false;
+        //ghostBall.GetComponent<MeshRenderer>().enabled = false;
         SceneManager.MoveGameObjectToScene(ghostBall.gameObject, simulationScene);
 
         ghostBall.Init(velocity);
@@ -72,22 +107,68 @@ public class DrawLine : MonoBehaviour
         }
 
         Destroy(ghostBall.gameObject);
+    }*/
+
+    public void DrawingLine()
+    {
+        line.enabled = true;
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+        line.positionCount = 1;
+        line.SetPosition(0, transform.position);
+
+        float remainingLenth = maxLength;
+
+        for(int i = 0; i < reflection; i++)
+        {
+            if(Physics.Raycast(ray.origin, ray.direction, out hit, remainingLenth))
+            {
+                line.positionCount++;
+                line.SetPosition(line.positionCount - 1, hit.point);
+                ray = new Ray(hit.point, Vector3.Reflect(ray.direction, hit.normal));
+
+                if (hit.collider.CompareTag("SoccerGoal"))
+                {
+                    canShot = true;
+                }
+                else
+                {
+                    canShot = false;
+                }
+
+                if (!hit.collider.CompareTag("Dummy") && !hit.collider.CompareTag("RedDummy"))
+                {
+                    break;
+                }
+                
+            }
+            else
+            {
+                line.positionCount++;
+                line.SetPosition(line.positionCount - 1, ray.origin + ray.direction * remainingLenth);
+            }
+        }
+
     }
 
-    void ChangeScene()
+    void SimulateChangesControl()
     {
-        if (levelControl != LevelManager.level)
+        foreach (var item in dummyObjects)
         {
-            dummyObjects.Clear();
-            dummiesParents[levelControl - 1].SetActive(false);
-            SceneManager.UnloadSceneAsync("SimulationScene" + levelControl);
-            levelControl++;
-            dummiesParents[levelControl - 1].SetActive(true);
-            CreatePhysicsScene();
-            StartCoroutine(ResetBallTimer());
-
+            item.Value.position = item.Key.position;
+            item.Value.rotation = item.Key.rotation;
         }
     }
+
+    #endregion
+
+    /*private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Dummy") || collision.gameObject.CompareTag("RedDummy"))
+        {
+            Debug.Log("Dummy'e deðdi");
+        }
+    }*/
 
     IEnumerator ResetBallTimer()
     {

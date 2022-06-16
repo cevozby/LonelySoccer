@@ -36,7 +36,7 @@ public class Shoting : MonoBehaviour
         {
             if (!shotCheck && !IgnoreMouse())
             {
-                drawLine.SimulateDottedLine(ball, transform.position, transform.forward * force);
+                drawLine.DrawingLine();
             }
             BallAngelControl();
         }
@@ -62,12 +62,12 @@ public class Shoting : MonoBehaviour
 
     void ShotControl()
     {
-        if (Input.GetMouseButtonUp(0) && !IgnoreMouse())
+        if (Input.GetMouseButtonUp(0) && !IgnoreMouse() && drawLine.canShot)
         {
             //var spawned = Instantiate(ball, transform.position, transform.rotation);
 
             //spawned.Init(transform.forward * force);
-            drawLine.SimulateDottedLine(ball, transform.position, Vector3.zero);
+            //drawLine.SimulateDottedLine(ball, transform.position, Vector3.zero);
             ballRB.velocity = transform.forward * force;
             shotCheck = true;
         }
