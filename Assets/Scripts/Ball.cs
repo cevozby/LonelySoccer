@@ -4,36 +4,49 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    [SerializeField] Rigidbody ballRB;
+    Rigidbody ballRB;
 
-    List<GameObject> touchDummies = new List<GameObject>();
+    //List<GameObject> touchDummies = new List<GameObject>();
 
-    int dummyCount;
+    //int dummyCount;
 
-    public static int addFrame;
+    //public static int addFrame;
 
     // Start is called before the first frame update
     void Start()
     {
-        //ballRB = GetComponent<Rigidbody>();
-        dummyCount = 0;
+        ballRB = GetComponent<Rigidbody>();
+        //dummyCount = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        addFrame = touchDummies.Count * 50;
-        Debug.Log(addFrame);
+        
     }
 
     public void Init(Vector3 velocity)
     {
         //ballRB.AddForce(velocity, ForceMode.Impulse);
+        Debug.Log("Ýnit fonksiyonunda ve velocity: " + velocity);
         ballRB.velocity = velocity;
-        //transform.Rotate(velocity);
+        Debug.Log("Ball velocity: " + ballRB.velocity);
+        
     }
 
-    private void OnCollisionEnter(Collision collision)
+    /*private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Dummy"))
+        {
+            var speed = ballRB.velocity.magnitude;
+            var direction = Vector3.Reflect(ballRB.velocity.normalized, collision.contacts[0].normal);
+
+            ballRB.velocity = direction * Mathf.Max(speed, 0);
+        }
+        
+    }*/
+
+    /*private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Dummy") || collision.gameObject.CompareTag("RedDummy"))
         {
@@ -66,7 +79,7 @@ public class Ball : MonoBehaviour
                 return;
             }
         }
-    }
+    }*/
 
     /*private void OnCollisionExit(Collision collision)
     {

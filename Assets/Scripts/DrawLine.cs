@@ -29,6 +29,11 @@ public class DrawLine : MonoBehaviour
 
     Vector3 direction;
 
+    public Ray ray;
+    public RaycastHit hit;
+
+    public Transform lineCannon;
+
     private void Start()
     {
         index = 0;
@@ -112,10 +117,10 @@ public class DrawLine : MonoBehaviour
     public void DrawingLine()
     {
         line.enabled = true;
-        Ray ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
+        ray = new Ray(lineCannon.position, lineCannon.forward);
+        //RaycastHit hit;
         line.positionCount = 1;
-        line.SetPosition(0, transform.position);
+        line.SetPosition(0, lineCannon.position);
 
         float remainingLenth = maxLength;
 

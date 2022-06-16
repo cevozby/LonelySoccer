@@ -19,6 +19,8 @@ public class Shoting : MonoBehaviour
     [SerializeField] float angleSpeed;
     float angle;
 
+    [SerializeField] Transform lineCannon;
+
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +47,11 @@ public class Shoting : MonoBehaviour
         {
             ballRB.velocity = Vector3.zero;
         }
+
+        /*if (shotCheck)
+        {
+            transform.Translate(transform.forward * force * Time.deltaTime);
+        }*/
         
     }
 
@@ -56,19 +63,22 @@ public class Shoting : MonoBehaviour
         //transform.Rotate(Vector3.up * angle);
         angle = Mathf.Clamp(angle, 30, 150);
         //transform.localRotation = Quaternion.AngleAxis(angle, Vector3.up);
-        transform.localRotation = Quaternion.Euler(angle * Vector3.up);
+        drawLine.lineCannon.localRotation = Quaternion.Euler(angle * Vector3.up);
 
     }
 
     void ShotControl()
     {
-        if (Input.GetMouseButtonUp(0) && !IgnoreMouse() && drawLine.canShot)
+        if (Input.GetMouseButtonUp(0) && !IgnoreMouse())
         {
             //var spawned = Instantiate(ball, transform.position, transform.rotation);
 
             //spawned.Init(transform.forward * force);
             //drawLine.SimulateDottedLine(ball, transform.position, Vector3.zero);
-            ballRB.velocity = transform.forward * force;
+            //ballRB.velocity = drawLine.lineCannon.forward * force;
+            ballRB.AddForce(drawLine.lineCannon.forward * force, ForceMode.Impulse);
+            //ball.Init(transform.forward * force);
+            //transform.Translate(transform.forward * force * Time.deltaTime);
             shotCheck = true;
         }
     }
@@ -93,6 +103,21 @@ public class Shoting : MonoBehaviour
             }
         }
         return redDummy;
+    }
+
+    
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Dummy"))
+        {
+
+            //var speed = ballRB.velocity.magnitude;
+            //ballRB.velocity = Vector3.Reflect(ballRB.velocity, collision.contacts[0].normal);
+            //ballRB.velocity = Vector3.Reflect(drawLine.ray.direction, drawLine.hit.normal);
+            //ballRB.velocity = direction * Mathf.Max(speed, 0);
+        }
+
     }
 
 }
