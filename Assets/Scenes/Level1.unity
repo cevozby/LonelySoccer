@@ -272,6 +272,7 @@ MonoBehaviour:
   canShot: 0
   reflection: 0
   maxLength: 0
+  lineCannon: {fileID: 0}
 --- !u!1 &15383147
 GameObject:
   m_ObjectHideFlags: 0
@@ -1880,6 +1881,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 795143918}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &871625427
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 871625428}
+  m_Layer: 0
+  m_Name: LineCannon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &871625428
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871625427}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3884483262744327362}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &945116897
 GameObject:
   m_ObjectHideFlags: 0
@@ -17990,14 +18022,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3890820681446171304}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 871625428}
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3890820681446171304
 GameObject:
   m_ObjectHideFlags: 0
@@ -18015,6 +18048,7 @@ GameObject:
   - component: {fileID: 3890820681446171311}
   - component: {fileID: 3890820681446171310}
   - component: {fileID: 3890820681446171312}
+  - component: {fileID: 3890820681446171313}
   m_Layer: 0
   m_Name: Soccer Ball
   m_TagString: Untagged
@@ -18144,6 +18178,7 @@ MonoBehaviour:
   canShot: 0
   reflection: 5
   maxLength: 5
+  lineCannon: {fileID: 871625428}
 --- !u!114 &3890820681446171309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18158,9 +18193,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drawLine: {fileID: 3890820681446171307}
   ball: {fileID: 560117648862224674, guid: 3a3ae25df6168284ea0e08a727ebcb37, type: 3}
-  force: 20
+  force: 10
   lookForce: {x: 0, y: 0, z: 0}
   angleSpeed: 100
+  lineCannon: {fileID: 871625428}
 --- !u!54 &3890820681446171310
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -18172,11 +18208,11 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!135 &3890820681446171311
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -18184,7 +18220,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3890820681446171304}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 850f775e113375546bb446469ff2a55b, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -18207,6 +18243,18 @@ MonoBehaviour:
   rightConfetti: {fileID: 2008343106}
   goalText: {fileID: 363457711}
   time: 2
+--- !u!114 &3890820681446171313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3890820681446171304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a067d813665f3449c9ca1483d12563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5993622340776121548
 Transform:
   m_ObjectHideFlags: 0
