@@ -14,7 +14,7 @@ public class DrawLine : MonoBehaviour
 
     public Transform lineCannon;
 
-    
+    public LayerMask mask;
 
     private void Start()
     {
@@ -26,6 +26,7 @@ public class DrawLine : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             line.enabled = false;
+            Shoting.drawLineCheck = false;
         }
     }
 
@@ -44,7 +45,7 @@ public class DrawLine : MonoBehaviour
 
         for(int i = 0; i < reflection; i++)
         {
-            if(Physics.Raycast(ray.origin, ray.direction, out hit, remainingLenth))
+            if(Physics.Raycast(ray.origin, ray.direction, out hit, remainingLenth, mask))
             {
                 line.positionCount++;
                 line.SetPosition(line.positionCount - 1, hit.point);

@@ -10,7 +10,7 @@ public class Shoting : MonoBehaviour
 
     Rigidbody ballRB;
 
-    public static bool shotCheck;
+    public static bool shotCheck, drawLineCheck;
 
     
     [SerializeField] float angleSpeed;
@@ -42,13 +42,14 @@ public class Shoting : MonoBehaviour
         if (!CanShot())
         {
             drawLine.line.enabled = false;
+            drawLineCheck = false;
         }
 
-        if (Input.GetMouseButton(0) && !shotCheck && !IgnoreMouse() && CanShot() && !ignoreUI())
+        if (Input.GetMouseButton(0) && !shotCheck && !IgnoreMouse() && CanShot() && !ignoreUI() && !PurpleDummyPatrol.purpleCheck)
         {
             
             drawLine.DrawingLine();
-            
+            drawLineCheck = true;
             BallAngelControl();
         }
     }
@@ -64,7 +65,7 @@ public class Shoting : MonoBehaviour
     //When player click up to the left mouse button, player shoots
     bool ShotControl()
     {
-        if (Input.GetMouseButtonUp(0) && !IgnoreMouse() && CanShot() && !ignoreUI())
+        if (Input.GetMouseButtonUp(0) && !IgnoreMouse() && CanShot() && !ignoreUI() && !PurpleDummyPatrol.purpleCheck)
         {
             
             playerCheck = true;

@@ -1,131 +1,66 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PurpleDummyPatrol : MonoBehaviour
 {
-    [SerializeField] Vector3 startPos;
-    [SerializeField] Vector3 endPos;
-
-    [SerializeField] Transform pointA, pointB;
-
-    Vector3 mouseStartPos;
-
-    bool startCheck, endCheck;
-
     [SerializeField] float speed;
 
-    Vector3 distance;
-    Vector3 slider;
+    public static bool purpleCheck;
 
-    float zDistance;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        startPos = transform.position;
-        Debug.Log("Point A: " + pointA.position + "Point B: " + pointB.position + "Distance: " + Vector3.Distance(pointA.position, pointB.position));
-        zDistance = Camera.main.WorldToScreenPoint(transform.position).z;
-    }
+    bool timerStart;
+    float time = 0.5f;
 
     // Update is called once per frame
-    void FixedUpdate()
-    {
-        //PurplePatrol();
-    }
-
     private void Update()
     {
-        //PurpleSlide();
-    }
-
-    void PurplePatrol()
-    {
-        /*if (Vector3.Distance(transform.position, startPos) <= 0.2f)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, endPos, speed * Time.fixedDeltaTime);
-            startCheck = true;
-            endCheck = false;
-        }
-        if (Vector3.Distance(transform.position, endPos) <= 0.2f)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, startPos, speed * Time.fixedDeltaTime);
-            startCheck = false;
-            endCheck = true;
-        }
-
-        if (startCheck)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, endPos, speed * Time.fixedDeltaTime);
-        }
-        if (endCheck)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, startPos, speed * Time.fixedDeltaTime);
-        }*/
-        //
+        PurpleSlide();
     }
 
 
-    /*void PurpleSlide()
+
+    void PurpleSlide()
     {
         Vector3 mousePos;
-        Vector3 deneme;
-        float yStart;
-        float yCurrent;
-        if (Input.GetMouseButtonDown(0))
-        {
-            deneme = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            yStart = deneme.y;
-            Debug.Log("Start y: " + yStart);
-        }
+        Vector3 target;
         
-        if (Input.GetMouseButton(0))
-        {
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            yCurrent = mousePos.y;
-            Debug.Log(" current y: " + yCurrent);
-        }
+
         Ray mouse = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //Debug.Log(mouse);
         RaycastHit hit;
-        bool isHit = Physics.Raycast(mouse, out hit, 500f);
-
-        if (isHit && hit.collider.CompareTag("PurpleDummy"))
+        bool isHit = Physics.Raycast(mouse, out hit, Mathf.Infinity);
+        //Get ray info and if it hits Purple Dummy and player doesn't draw shot line, purple Check is true
+        if (isHit && hit.collider.CompareTag("PurpleDummy") && !Shoting.drawLineCheck)
         {
-            
+            purpleCheck = true;
+        }
+        //While in your mouse line, move the Purple Dummy to where the mouse is
+        if (Input.GetMouseButton(0) && isHit && hit.collider.CompareTag("Line") && purpleCheck)
+        {
+            mousePos = hit.point;
+            target = new Vector3(mousePos.x, transform.position.y, mousePos.z);
+            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+        }
+        //Set purplecheck to false 0.5 seconds after releasing the mouse
+        //In this way, the shot function does not work when we click up to the mouse
+        if (Input.GetMouseButtonUp(0) && purpleCheck)
+        {
+            time = 0.5f;
+            timerStart = true;
             
         }
-    }*/
 
-    private void OnMouseDown()
-    {
-        //distance = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
-    }
-
-    private void OnMouseDrag()
-    {
-        /*slider = new Vector3(Input.mousePosition.x, Input.mousePosition.y, zDistance);
-        slider.x = Mathf.Clamp(slider.x, pointA.position.x, pointB.position.x);
-        slider.y = Mathf.Clamp(slider.y, pointA.position.y, pointB.position.y);
-        slider.z = Mathf.Clamp(slider.z, pointA.position.z, pointB.position.z);
-        
-
-        transform.position = slider; //Camera.main.ScreenToWorldPoint(Input.mousePosition - distance);
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(slider);
-        float xClamp = Mathf.Clamp(worldPosition.x, pointA.position.x, pointB.position.x);
-        float yClamp = Mathf.Clamp(worldPosition.y, transform.position.y, transform.position.y);
-        float zClamp = Mathf.Clamp(worldPosition.z, pointA.position.z, pointB.position.z);
-
-        transform.position = new Vector3(xClamp, yClamp, zClamp);*/
-        float distancee = Vector3.Distance(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        Debug.Log("Distance: " + distancee);
-        if(distancee >= 7f)
+        if (timerStart)
         {
-            transform.Translate(transform.right * speed * distancee/10);
+            
+            if (time > 0f)
+            {
+                time -= Time.deltaTime;
+                Debug.Log(time);
+            }
+            if (time <= 0f)
+            {
+                purpleCheck = false;
+                timerStart = false;
+            }
         }
-        
-
-
     }
 
 }
