@@ -1,53 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class NextLevel : MonoBehaviour
 {
-    /*DrawLine level;
+    [SerializeField] GameObject[] dummiesParents;
 
-    //[SerializeField] Transform ball;
-    Vector3 startPos;
+    int levelControl;//Get current level value
 
     private void Start()
     {
-        startPos = transform.position;
+        levelControl = 1;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         ChangeScene();
     }
 
+    #region SceneManagement
+
+    //If levelControl value less then level value, close active level and open new level
     void ChangeScene()
     {
-        if (level.levelControl != LevelManager.level)
+        if (levelControl != LevelManager.level)
         {
-            level.dummyObjects.Clear();
-            level.dummiesParents[level.levelControl - 1].SetActive(false);
-            SceneManager.UnloadSceneAsync("SimulationScene" + level.levelControl);
-            level.levelControl++;
-            level.dummiesParents[level.levelControl - 1].SetActive(true);
-            level.CreatePhysicsScene();
+
+            dummiesParents[levelControl - 1].SetActive(false);
+            levelControl++;
+            dummiesParents[levelControl - 1].SetActive(true);
 
         }
     }
 
-    void ResetBall()
-    {
-        if (level.levelControl != LevelManager.level)
-        {
-            StartCoroutine(ResetBallTimer());
-        }
-    }
-
-    IEnumerator ResetBallTimer()
-    {
-
-        yield return new WaitForSeconds(1.5f);
-        transform.position = startPos;
-
-    }*/
+    #endregion
 }

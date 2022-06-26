@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    //Keep level information
+    //Keep level value information
     public static int level = 1;
 
 }

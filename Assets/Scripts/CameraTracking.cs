@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class CameraTracking : MonoBehaviour
 {
-    //public static bool shotCheck;
-    //[SerializeField] Transform target;
-    [SerializeField] Transform target;
-    [SerializeField] Vector3 offset;
-    public Vector3 takip;
+    
+    [SerializeField] Transform target;//Get the target information
+    [SerializeField] Vector3 offset;//Set distance between camera and the target
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +17,6 @@ public class CameraTracking : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        takip = target.position;
-        transform.position = target.position + offset;
+        transform.position = target.position + offset;//Set camera position 
     }
 }

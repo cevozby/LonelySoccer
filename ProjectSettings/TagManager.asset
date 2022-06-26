@@ -7,6 +7,9 @@ TagManager:
   - SoccerGoal
   - RedDummy
   - Dummy
+  - Ground
+  - PlayButton
+  - PurpleDummy
   layers:
   - Default
   - TransparentFX

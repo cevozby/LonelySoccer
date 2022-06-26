@@ -1,123 +1,150 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Shoting : MonoBehaviour
 {
     [SerializeField] DrawLine drawLine;
-
-    [SerializeField] Ball ball;
-    [SerializeField] float force = 20;
-
-    public Vector3 lookForce;
+    [SerializeField] GameObject infoText;
 
     Rigidbody ballRB;
 
     public static bool shotCheck;
 
-    Vector3 worldPos;
+    
     [SerializeField] float angleSpeed;
     float angle;
 
     [SerializeField] Transform lineCannon;
 
+    [SerializeField] Animator playerAnim;
+
+    bool playerCheck;
+
+    bool canShot;
 
     // Start is called before the first frame update
     void Start()
     {
         ballRB = GetComponent<Rigidbody>();
         shotCheck = false;
+        canShot = false;
     }
+
+    
 
     // Update is called once per frame
     void Update()
     {
         ShotControl();
-        
-        if (Input.GetMouseButton(0))
+
+        if (!CanShot())
         {
-            if (!shotCheck && !IgnoreMouse())
-            {
-                drawLine.DrawingLine();
-            }
+            drawLine.line.enabled = false;
+        }
+
+        if (Input.GetMouseButton(0) && !shotCheck && !IgnoreMouse() && CanShot() && !ignoreUI())
+        {
+            
+            drawLine.DrawingLine();
+            
             BallAngelControl();
         }
-
-        if (GoalManager.goalCheck)
-        {
-            ballRB.velocity = Vector3.zero;
-        }
-
-        /*if (shotCheck)
-        {
-            transform.Translate(transform.forward * force * Time.deltaTime);
-        }*/
-        
     }
 
+    //Rotate linecannon to rotate your line
     void BallAngelControl()
     {
-        
-        //Debug.Log(Input.GetAxis("Mouse X"));
-        angle += Input.GetAxis("Mouse X") * angleSpeed * Time.deltaTime;
-        //transform.Rotate(Vector3.up * angle);
-        angle = Mathf.Clamp(angle, 30, 150);
-        //transform.localRotation = Quaternion.AngleAxis(angle, Vector3.up);
-        drawLine.lineCannon.localRotation = Quaternion.Euler(angle * Vector3.up);
+        angle += Input.GetAxis("Mouse X") * angleSpeed * Time.deltaTime;//Get mouse input
+        angle = Mathf.Clamp(angle, 30, 150);//Clamp mouse value
+        lineCannon.localRotation = Quaternion.Euler(angle * Vector3.up);
 
     }
-
-    void ShotControl()
+    //When player click up to the left mouse button, player shoots
+    bool ShotControl()
     {
-        if (Input.GetMouseButtonUp(0) && !IgnoreMouse())
+        if (Input.GetMouseButtonUp(0) && !IgnoreMouse() && CanShot() && !ignoreUI())
         {
-            //var spawned = Instantiate(ball, transform.position, transform.rotation);
-
-            //spawned.Init(transform.forward * force);
-            //drawLine.SimulateDottedLine(ball, transform.position, Vector3.zero);
-            //ballRB.velocity = drawLine.lineCannon.forward * force;
-            ballRB.AddForce(drawLine.lineCannon.forward * force, ForceMode.Impulse);
-            //ball.Init(transform.forward * force);
-            //transform.Translate(transform.forward * force * Time.deltaTime);
-            shotCheck = true;
+            
+            playerCheck = true;
+            canShot = false;
+            infoText.SetActive(false);
+            playerAnim.SetBool("Shot", playerCheck);
+            StartCoroutine(PlayerAnimWait());
         }
+        return shotCheck;
     }
 
+
+    //Send a ray while pressing the mouse
+    //Get information from where the ray hits
+    //If the ray hits Red Dummy or Purple Dummy, ignore returns true, otherwise returns false
     public static bool IgnoreMouse()
     {
-        
-        bool redDummy = false;
+
+        bool ignore = false;
         if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
         {
             Ray mouse = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            bool isHit = Physics.Raycast(mouse,out hit, 500f);
-            
-            if (isHit && hit.collider.CompareTag("RedDummy"))
+            bool isHit = Physics.Raycast(mouse, out hit, 500f);
+            if (isHit && (hit.collider.CompareTag("RedDummy") || hit.collider.CompareTag("PurpleDummy")))
             {
-                redDummy = true;
+                ignore = true;
             }
             else
             {
-                redDummy = false;
+                ignore = false;
             }
         }
-        return redDummy;
+        return ignore;
     }
 
-    
-    
-    private void OnCollisionEnter(Collision collision)
+    //If there is a UI element and the mouse is over it, ignore returns true
+    public static bool ignoreUI()
     {
-        if (collision.gameObject.CompareTag("Dummy"))
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        pointerEventData.position = Input.mousePosition;
+
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerEventData, raycastResults);
+
+
+        for (int i = 0; i < raycastResults.Count; i++)
         {
-
-            //var speed = ballRB.velocity.magnitude;
-            //ballRB.velocity = Vector3.Reflect(ballRB.velocity, collision.contacts[0].normal);
-            //ballRB.velocity = Vector3.Reflect(drawLine.ray.direction, drawLine.hit.normal);
-            //ballRB.velocity = direction * Mathf.Max(speed, 0);
+            if (raycastResults[i].gameObject.GetComponent<IgnoreGameUI>() != null)
+            {
+                raycastResults.RemoveAt(i);
+                i--;
+            }
         }
-
+       
+        return raycastResults.Count > 0;
     }
+    
+    //Can player shot or not, if player wants to cancel shot, player clicks up right mouse button
+    bool CanShot()
+    {
+        
+        if (Input.GetMouseButtonDown(0))
+        {
+            canShot = true;
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            canShot = false;
+        }
+        return canShot;
+    }
+    
+    IEnumerator PlayerAnimWait()
+    {
+        yield return new WaitForSeconds(1);
+        shotCheck = true;
+        playerCheck = false;
+        playerAnim.SetBool("Shot", playerCheck);
+    }
+
 
 }
