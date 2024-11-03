@@ -21,6 +21,8 @@ public class Ball : MonoBehaviour
 
     public static bool forceCheck;
 
+    float rotateX, rotateY, rotateZ;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,6 +57,11 @@ public class Ball : MonoBehaviour
         {
             BallBounce();
             BallLastMove();
+            transform.Rotate(new Vector3(rotateX, rotateY, rotateZ));
+        }
+        else
+        {
+            transform.Rotate(Vector3.zero);
         }
 
     }
@@ -85,7 +92,9 @@ public class Ball : MonoBehaviour
             
             ballRB.AddForce(Vector3.up * force, ForceMode.Impulse);
             forceCheck = true;
-            
+            rotateX = Random.Range(-5, 5);
+            rotateY = Random.Range(-5, 5);
+            rotateZ = Random.Range(-5, 5);
         }
     }
 

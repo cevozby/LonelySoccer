@@ -13,7 +13,6 @@ public class DayManagement : MonoBehaviour
     {
         //Setting the text of the text
         dayText.text = "DAY" + LevelManager.level.ToString();
-        Debug.Log("Day Start");
         StartCoroutine(DayTimer());
     }
 
